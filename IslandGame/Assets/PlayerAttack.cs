@@ -12,6 +12,8 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] LayerMask attackable;
 
     bool readyToAttack = true;
+    //Will be altered later by weapon equips
+    public float damage;
 
     private void Update()
     {
@@ -22,7 +24,6 @@ public class PlayerAttack : MonoBehaviour
     {
         if (Input.GetKey(KeyCode.Mouse0) && readyToAttack)
         {
-            print("Start Attack");
             StartCoroutine(Attack());
         }
     }
@@ -32,7 +33,7 @@ public class PlayerAttack : MonoBehaviour
         readyToAttack = false;
 
         //Start Attack Anim + Sound
-        print("Wait");
+
         yield return new WaitForSeconds(attackDelay);
 
         AttackCheck();
@@ -44,22 +45,23 @@ public class PlayerAttack : MonoBehaviour
 
     private void ResetAttack()
     {
-        print("Attack Ready");
+        print("AttackReady");
         readyToAttack = true;
     }
 
     private void AttackCheck()
     {
-        print("Check");
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, attackDistance, attackable))
         {
-            print("CheckPassed");
-            HitTarget(hit.point);
+            HitTarget(hit);
         }
     }
 
-    private void HitTarget(Vector3 hitPoint)
+    private void HitTarget(RaycastHit hitTarget)
     {
-        print("Slap");
+        if (hitTarget.collider.gameObject.GetComponent<EnemyHealth>() != null)
+        {
+            hitTarget.collider.gameObject.GetComponent<EnemyHealth>().TakeDamage(damage);
+        }
     }
 }
