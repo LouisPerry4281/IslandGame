@@ -11,7 +11,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] float attackLag;
     [SerializeField] LayerMask attackable;
 
-    [SerializeField] Animator spearAnimator;
+    public Animator animator;
     [SerializeField] GameObject visualEffect;
 
     bool readyToAttack = true;
@@ -37,7 +37,8 @@ public class PlayerAttack : MonoBehaviour
 
         //Start Attack Anim + Sound
         //Maybe set this to default "Swing" the just swap out the animator reference with new equips
-        spearAnimator.Play("SpearAttack");
+        if (animator != null)
+            animator.Play("SpearAttack");
 
         yield return new WaitForSeconds(attackDelay);
 
