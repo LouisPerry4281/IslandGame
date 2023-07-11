@@ -11,6 +11,9 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] float attackLag;
     [SerializeField] LayerMask attackable;
 
+    [SerializeField] Animator spearAnimator;
+    [SerializeField] GameObject visualEffect;
+
     bool readyToAttack = true;
     //Will be altered later by weapon equips
     public float damage;
@@ -33,6 +36,8 @@ public class PlayerAttack : MonoBehaviour
         readyToAttack = false;
 
         //Start Attack Anim + Sound
+        //Maybe set this to default "Swing" the just swap out the animator reference with new equips
+        spearAnimator.Play("SpearAttack");
 
         yield return new WaitForSeconds(attackDelay);
 
@@ -51,6 +56,7 @@ public class PlayerAttack : MonoBehaviour
 
     private void AttackCheck()
     {
+        print("check");
         if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hit, attackDistance, attackable))
         {
             HitTarget(hit);
@@ -59,6 +65,9 @@ public class PlayerAttack : MonoBehaviour
 
     private void HitTarget(RaycastHit hitTarget)
     {
+        GameObject hitMark = Instantiate(visualEffect, hitTarget.point, Quaternion.identity);
+        Destroy(hitMark, 5);
+
         if (hitTarget.collider.gameObject.GetComponent<EnemyHealth>() != null)
         {
             hitTarget.collider.gameObject.GetComponent<EnemyHealth>().TakeDamage(damage);
