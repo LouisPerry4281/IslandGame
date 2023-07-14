@@ -11,6 +11,8 @@ public class PlayerInteract : MonoBehaviour
     PlayerAttack playerAttackScript;
     Transform hand;
 
+    GameObject heldItem;
+
     private void Start()
     {
         hand = GameObject.Find("Hand").GetComponent<Transform>();
@@ -23,10 +25,17 @@ public class PlayerInteract : MonoBehaviour
         {
             PickupItem(groundSpear);
         }
+
+        else if (Input.GetKeyDown(KeyCode.Q) && heldItem != null)
+        {
+            DropItem();
+        }
     }
 
     private void PickupItem(GameObject itemToPickup)
     {
+        heldItem = itemToPickup;
+
         itemToPickup.GetComponent<Rigidbody>().isKinematic = true;
         itemToPickup.GetComponent<Collider>().enabled = false;
         itemToPickup.transform.SetParent(hand);
@@ -34,5 +43,16 @@ public class PlayerInteract : MonoBehaviour
         itemToPickup.transform.localRotation = Quaternion.Euler(0, 0, 0);
 
         playerAttackScript.animator = GetComponentInChildren<Animator>();
+    }
+
+    private void DropItem()
+    {
+        heldItem.GetComponent<Rigidbody>().isKinematic = false;
+        heldItem.GetComponent<Collider>().enabled = true;
+        heldItem.transform.SetParent(null);
+
+        playerAttackScript.animator = null;
+
+        heldItem = null;
     }
 }
