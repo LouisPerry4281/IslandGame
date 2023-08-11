@@ -4,15 +4,35 @@ using UnityEngine;
 
 public class InventoryManager : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] GameObject[] objectReference;
+    public Dictionary<int, int> quantities = new Dictionary<int, int>();
+
+
+    public void AddToInventory(int id, int quantityToAdd)
     {
-        
+        quantities.TryGetValue(id, out int quantity);
+        quantity += quantityToAdd;
+        quantities.Remove(id);
+        quantities.Add(id, quantity);
+
+        /*
+        int printValue;
+        quantities.TryGetValue(id, out printValue);
+        print(id + " " + printValue);
+        */
     }
 
-    // Update is called once per frame
-    void Update()
+    public void RemoveFromInventory(int id, int quantityToRemove)
     {
-        
+        quantities.TryGetValue(id, out int quantity);
+        quantity -= quantityToRemove;
+        quantities.Remove(id);
+        quantities.Add(id, quantity);
+
+        /*
+        int printValue;
+        quantities.TryGetValue(id, out printValue);
+        print(id + " " + printValue);
+        */
     }
 }
