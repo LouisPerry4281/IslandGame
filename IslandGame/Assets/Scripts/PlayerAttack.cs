@@ -31,6 +31,11 @@ public class PlayerAttack : MonoBehaviour
         }
     }
 
+    public void SetAnimatorTarget()
+    {
+
+    }
+
     IEnumerator Attack()
     {
         readyToAttack = false;

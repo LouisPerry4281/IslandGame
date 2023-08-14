@@ -9,44 +9,26 @@ public class PlayerInteract : MonoBehaviour
     [SerializeField] GameObject groundSpear;
 
     PlayerAttack playerAttackScript;
-    Transform hand;
 
-    GameObject heldItem;
+    public GameObject heldItem;
 
     private void Start()
     {
-        hand = GameObject.Find("Hand").GetComponent<Transform>();
         playerAttackScript = GetComponent<PlayerAttack>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            PickupItem(groundSpear);
-        }
-
-        else if (Input.GetKeyDown(KeyCode.Q) && heldItem != null)
+        if (Input.GetKeyDown(KeyCode.Q) && heldItem != null)
         {
             DropItem();
         }
     }
 
-    private void PickupItem(GameObject itemToPickup)
-    {
-        heldItem = itemToPickup;
-
-        itemToPickup.GetComponent<Rigidbody>().isKinematic = true;
-        itemToPickup.GetComponent<Collider>().enabled = false;
-        itemToPickup.transform.SetParent(hand);
-        itemToPickup.transform.localPosition = Vector3.zero;
-        itemToPickup.transform.localRotation = Quaternion.Euler(0, 0, 0);
-
-        playerAttackScript.animator = GetComponentInChildren<Animator>();
-    }
-
     private void DropItem()
     {
+        //Move DropItem to InvMan
+        //Change this to utilize RemoveToInventory from InvMan
         heldItem.GetComponent<Rigidbody>().isKinematic = false;
         heldItem.GetComponent<Collider>().enabled = true;
         heldItem.transform.SetParent(null);
